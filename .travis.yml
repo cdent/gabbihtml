@@ -1,0 +1,18 @@
+sudo: false
+language: python
+python:
+      - "3.5"
+install:
+      - pip install tox 
+script:
+      - tox
+env:
+      - TOXENV=py27
+      - TOXENV=py33
+      - TOXENV=py34
+      - TOXENV=py35
+      - TOXENV=pypy
+      - TOXENV=pep8
+
+notifications:
+      irc: "chat.freenode.net#gabbi"

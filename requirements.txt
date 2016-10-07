@@ -1,4 +1,5 @@
 pbr
 lxml
+cssselect
 six
 gabbi

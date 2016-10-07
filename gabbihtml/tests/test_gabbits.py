@@ -17,13 +17,11 @@ For the sake of exploratory development.
 """
 
 import os
-import sys
 
 from gabbi import driver
-from gabbi.handlers import base
-from gabbi.tests import simple_wsgi
 
 from gabbihtml import handler
+from gabbihtml.tests import simple_wsgi
 
 
 TESTS_DIR = 'gabbits'
