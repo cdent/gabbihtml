@@ -26,6 +26,16 @@ tests:
     title: Hello World
     p: lorem ipsum dolor sit amet
 
+- name: response html
+  GET: /presenter
+  response_html:
+      h1: $RESPONSE['h1']
+
+- name: history response html
+  GET: /presenter
+  response_html:
+      h1: $HISTORY['parse html'].$RESPONSE['h1']
+
 - name: response handle html
   desc: replacers do not work on posted form data because of scoping and escaping
   xfail: True

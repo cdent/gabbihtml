@@ -56,6 +56,8 @@ class HTMLHandler(base.ContentHandler):
         except ValueError:  # content
             count = None
 
+        expected = test.replace_template(value)
+
         selector, attribute = _parse_selector(item)
         nodes = test.response_data.cssselect(selector)
         node_count = len(nodes)
@@ -83,42 +85,39 @@ class HTMLHandler(base.ContentHandler):
             if attribute:
                 actual = node.attrib[attribute]
                 test.assertEqual(
-                    actual, value,
+                    actual, expected,
                     "unexpected value for attribute '%s' on element "
                     "matching '%s'" %
                     (attribute, selector))
             else:
                 actual = node.text.strip()
                 test.assertEqual(
-                    actual, value, 'Unable to match %s as %s, got %s'
-                    % (selector, actual, value))
+                    actual, expected, 'Unable to match %s as %s, got %s'
+                    % (selector, expected, actual))
 
     @classmethod
-    def gen_replacer(cls, test):
-        def replace_func(match):
-            selector, attribute = _parse_selector(match.group("arg"))
+    def replacer(cls, response_data, match):
+        selector, attribute = _parse_selector(match)
 
-            doc = test.prior.response_data
-            nodes = doc.cssselect(selector)
-            node_count = len(nodes)
-            if node_count == 0:
-                raise ValueError("no matching elements for '%s'" % selector)
-            elif node_count > 1:
+        nodes = response_data.cssselect(selector)
+        node_count = len(nodes)
+        if node_count == 0:
+            raise ValueError("no matching elements for '%s'" % selector)
+        elif node_count > 1:
+            raise ValueError(
+                "more than one matching element for '%s'" % selector)
+        node = nodes[0]
+
+        if attribute:
+            try:
+                return node.attrib[attribute]
+                # TODO(FND): take `<base>` into account for relative URIs
+            except KeyError:
                 raise ValueError(
-                    "more than one matching element for '%s'" % selector)
-            node = nodes[0]
-
-            if attribute:
-                try:
-                    return node.attrib[attribute]
-                    # TODO(FND): take `<base>` into account for relative URIs
-                except KeyError:
-                    raise ValueError(
-                        "missing attribute '%s' on element matching '%s'" %
-                        (attribute, selector))
-            else:
-                return node.text
-        return replace_func
+                    "missing attribute '%s' on element matching '%s'" %
+                    (attribute, selector))
+        else:
+            return node.text
 
     @staticmethod
     def dumps(data):
