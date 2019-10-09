@@ -37,8 +37,6 @@ tests:
       h1: $HISTORY['parse html'].$RESPONSE['h1']
 
 - name: response handle html
-  desc: replacers do not work on posted form data because of scoping and escaping
-  xfail: True
   POST: /
   request_headers:
     content-type: application/x-www-form-urlencoded

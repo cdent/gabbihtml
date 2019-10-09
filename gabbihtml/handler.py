@@ -40,10 +40,9 @@ class HTMLHandler(base.ContentHandler):
         # TODO(cdent): This is going to be common, should be on the
         # superclass.
         content_type = content_type.split(';', 1)[0].strip()
-        if (content_type == 'application/x-www-form-urlencoded' or
-                'html' in content_type):
-            return True
-        return False
+        is_form = content_type == 'application/x-www-form-urlencoded'
+        is_html = 'html' in content_type
+        return is_form or is_html
 
     @staticmethod
     def loads(output):

@@ -1,2 +1,2 @@
-testrepository
+stestr
 sphinx
