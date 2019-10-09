@@ -120,13 +120,12 @@ class HTMLHandler(base.ContentHandler):
             return node.text
 
     @staticmethod
-    def dumps(data):
+    def dumps(data, test=None):
         """Turn dict into urlencoded form."""
         # TODO(FND): Because of the escaping that happens here, and
         # the way in which urlencode is overzealous, the $RESPONSE
         # handling can't be done with the output from this. It could
         # be possible to replicate what is done in gabbi.case to
-        # process query strings, but we don't have access to the
-        # methods here because we just have data, not the test
-        # class.
+        # process query strings, because we have access to the
+        # methods here along with the data.
         return urlparse.urlencode(data, doseq=True)
